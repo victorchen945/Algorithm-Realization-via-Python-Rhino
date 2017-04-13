@@ -19,8 +19,8 @@ TRUE=1
 FALSE=0
 OVERFLOW=-2
 
-MAX=99999999999999
-SCALE=50000
+MAX=99999999999999 # indicates the +∞
+SCALE=50000 
 
 #struct closedge
 class closedge:
@@ -32,11 +32,11 @@ class closedge:
 #struct graph
 class Graph:
     def __init__(self):
-        self.vertex=[]
-        self.vexnum=0
-        self.arcnum=0
-        self.arc=[[]]
-        self.edges=[]
+        self.vertex=[]  #the vertex in the Graph
+        self.vexnum=0   #number of the vertex, or just len(self.vertex)
+        self.arcnum=0   #number of the edges
+        self.arc=[[]]   #edge information in matrix
+        self.edges=[]   #the edge in the Graph (exact curves in rhino)
         
 
 
@@ -60,14 +60,15 @@ def matdisplay(G):
 #read in the graph
 def _read():
     
-    #to be modified
-    #get vertex and edges
-    #objs=rs.GetObjects("get the graph")
+    #followings to be modified
+    """objs=rs.GetObjects("get the graph")
     
     #clearbin=ov.pool(objs)
     
     #pts=ov.delobj(clearbin).pts
-    #crvs=ov.delobj(clearbin).crvs
+    #crvs=ov.delobj(clearbin).crvs"""
+    
+    #get vertex and edges
     pts=rs.GetObjects("points",rs.filter.point)
     crvs=rs.GetObjects("curves",rs.filter.curve)
     
@@ -120,6 +121,7 @@ def locateVex(G,stpt):
     print "not found"
     return ERROR
 
+#return the minimum value position in the tuple closedge
 def minnum(closedge):
     min=MAX
     pos=0
@@ -128,15 +130,13 @@ def minnum(closedge):
         if closedge.lowcost[i]<MAX and closedge.lowcost[i]<>0:
             min=closedge.lowcost[i]
             pos=i
-            
-            
     return pos
 
+#display the graph in black
 def _defdisplay(obj):
     rs.ObjectColor(obj,[0,0,0])
     return OK
-    
-    
+#display the minimum spining tree in red    
 def _display(obj):
     rs.ObjectColor(obj,[255,0,0])
     return OK
@@ -181,7 +181,8 @@ class _mintree():
         
         for line in lines:
             _display(line)
-                        
+        
+        #delete duplicated lines to show red spining tree
         crvs=lines
         crvs.extend(G.edges)
         for i in range(len(crvs)):
@@ -196,12 +197,13 @@ class _mintree():
         return OK
         
     def krus(self,mat):
-        #kruscal algorithm
+        #kruscal algorithm, to be modified
         return OK
         
     
 
 
+#main function
 
 def main():
     
